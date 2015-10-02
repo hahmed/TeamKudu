@@ -1,0 +1,147 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+  <div class="dashhead">
+      <div class="dashhead-titles">
+        <h6 class="dashhead-subtitle">Dashboards</h6>
+        <h3 class="dashhead-title">Overview</h3>
+      </div>
+
+      <div class="dashhead-toolbar">
+        <div class="input-with-icon dashhead-toolbar-item">
+          <input type="text" value="01/01/15 - 01/08/15" class="form-control" data-provide="datepicker">
+          <span class="icon icon-calendar"></span>
+        </div>
+        <span class="dashhead-toolbar-divider hidden-xs"></span>
+        <div class="btn-group dashhead-toolbar-item btn-group-thirds">
+          <button type="button" class="btn btn-primary-outline">Day</button>
+          <button type="button" class="btn btn-primary-outline active">Week</button>
+          <button type="button" class="btn btn-primary-outline">Month</button>
+        </div>
+      </div>
+    </div>
+
+    <ul class="nav nav-bordered m-t m-b-0" role="tablist">
+      <li class="active" role="presentation">
+        <a href="#traffic" role="tab" data-toggle="tab" aria-controls="traffic">Traffic</a>
+      </li>
+      <li role="presentation">
+        <a href="#sales" role="tab" data-toggle="tab" aria-controls="sales">Sales</a>
+      </li>
+      <li role="presentation">
+        <a href="#support" role="tab" data-toggle="tab" aria-controls="support">Support</a>
+      </li>
+    </ul>
+
+    <hr class="m-t-0 m-b-lg">
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="traffic">
+        <div class="row text-center m-t-md">
+          <div class="col-sm-4 m-b-md">
+            <div class="w-lg m-x-auto">
+              <canvas
+                class="ex-graph"
+                width="200" height="200"
+                data-chart="doughnut"
+                data-value="[{ value: 230, color: '#42a5f5', label: 'Returning' }, { value: 130, color: '#1bc98e', label: 'New' }]"
+                data-segment-stroke-color="#222">
+              </canvas>
+            </div>
+            <strong class="text-muted">Traffic</strong>
+            <h3>New vs Returning</h3>
+          </div>
+          <div class="col-sm-4 m-b-md">
+            <div class="w-lg m-x-auto">
+              <canvas
+                class="ex-graph"
+                width="200" height="200"
+                data-chart="doughnut"
+                data-value="[{ value: 330, color: '#42a5f5', label: 'Recurring' }, { value: 30, color: '#1bc98e', label: 'New' }]"
+                data-segment-stroke-color="#222">
+              </canvas>
+            </div>
+            <strong class="text-muted">Revenue</strong>
+            <h3>New vs Recurring</h3>
+          </div>
+          <div class="col-sm-4 m-b-md">
+            <div class="w-lg m-x-auto">
+              <canvas
+                class="ex-graph"
+                width="200" height="200"
+                data-chart="doughnut"
+                data-value="[{ value: 100, color: '#42a5f5', label: 'Referrals' }, { value: 260, color: '#1bc98e', label: 'Direct' }]"
+                data-segment-stroke-color="#222">
+              </canvas>
+            </div>
+            <strong class="text-muted">Traffic</strong>
+            <h3>Direct vs Referrals</h3>
+          </div>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="sales">
+        <div class="ex-line-graphs m-b-md">
+          <canvas
+            class="ex-line-graph"
+            width="600" height="400"
+            data-chart="line"
+            data-scale-line-color="transparent"
+            data-scale-grid-line-color="rgba(255,255,255,.05)"
+            data-scale-font-color="#a2a2a2"
+            data-labels="['','Aug 29','','','Sept 5','','','Sept 12','','','Sept 19','']"
+            data-value="[{data: [2500, 3300, 2512, 2775, 2498, 3512, 2925, 4275, 3507, 3825, 3445, 3985]}]">
+          </canvas>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="support">
+        <div class="ex-line-graphs m-b-md">
+          <canvas
+            class="ex-line-graph"
+            width="600" height="400"
+            data-chart="bar"
+            data-scale-line-color="transparent"
+            data-scale-grid-line-color="rgba(255,255,255,.05)"
+            data-scale-font-color="#a2a2a2"
+            data-labels="['August','September','October','November','December','January','February']"
+            data-value="[{ label: 'First dataset', data: [65, 59, 80, 81, 56, 55, 40] }, { label: 'Second dataset', data: [28, 48, 40, 19, 86, 27, 90] }]">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr-divider m-t m-b">
+      <h3 class="hr-divider-content hr-divider-heading">Quick stats</h3>
+    </div>
+
+    <div class="row statcards m-t-md m-b text-xs-center text-md-left">
+      <div class="col-xs-6 col-sm-3 statcard m-b">
+        <h3 class="statcard-number text-success">
+          12,938
+          <small class="delta-indicator delta-positive">5%</small>
+        </h3>
+        <span class="statcard-desc">Page views</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 statcard m-b">
+        <h3 class="statcard-number text-danger">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h3>
+        <span class="statcard-desc">Downloads</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 statcard m-b">
+        <h3 class="statcard-number text-success">
+          1,293
+          <small class="delta-indicator delta-positive">6.75%</small>
+        </h3>
+        <span class="statcard-desc">Sign-ups</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 statcard m-b">
+        <h3 class="statcard-number text-danger">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h3>
+        <span class="statcard-desc">Downloads</span>
+      </div>
+    </div>

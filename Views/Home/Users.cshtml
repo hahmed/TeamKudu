@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Users";
+}
+@model List<Team.Models.User>
+  <div class="dashhead">
+      <div class="dashhead-titles">
+        <h6 class="dashhead-subtitle">Dashboards</h6>
+        <h3 class="dashhead-title">Users</h3>
+      </div>
+  </div>
+
+    <ul class="nav nav-bordered">
+      <li class="active" role="presentation">
+        <a asp-controller="Home" asp-action="Users" role="tab" aria-controls="all">All</a>
+      </li>
+      <li role="presentation">
+        <a asp-controller="Home" asp-action="Users" asp-route-issurveyor="true" role="tab" aria-controls="surveyors">Surveyors</a>
+      </li>
+    </ul>
+    <hr class="m-t-0 m-b-lg">
+
+<table class="table" data-sort="table">
+      <thead>
+        <tr>
+          <th class="header" style="max-width:40px;">Id</th>
+          <th class="header">Name</th>
+          <th class="header">Email</th>
+          <th class="header">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach(var item in Model)
+        {
+          <tr>
+            <td>#@item.UserId</td>
+            <td>@item.Name</td>
+            <td>@item.Email</td>
+            <td>@item.Status</td>
+          </tr>
+         }
+        </tbody>
+    </table>

@@ -1,0 +1,65 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Team</title>
+        <link rel="stylesheet" href="~/css/site.css" asp-file-version="true" />
+    </head>
+    <body>
+      <div class="with-iconav">
+        <nav class="iconav">
+          <a class="iconav-brand" href="/">
+            <span class="icon icon-leaf iconav-brand-icon"></span>
+          </a>
+          <div class="iconav-slider">
+            <ul class="nav nav-pills iconav-nav">
+              <li class="">
+                <a href="/" title="Overview" data-toggle="tooltip" data-placement="right" data-container="body">
+                  <span class="icon icon-home"></span>
+                  <small class="iconav-nav-label visible-xs-block">Overview</small>
+                </a>
+              </li>
+              <li >
+                <a href="/orgs" title="Organisations" data-toggle="tooltip" data-placement="right" data-container="body">
+                  <span class="icon icon-shop"></span>
+                  <small class="iconav-nav-label visible-xs-block">Organisations</small>
+                </a>
+              </li>
+              <li >
+                <a href="/users" title="Fluid layout" data-toggle="tooltip" data-placement="right" data-container="body">
+                  <span class="icon icon-users"></span>
+                  <small class="iconav-nav-label visible-xs-block">Users</small>
+                </a>
+              </li>
+              <li >
+                <a asp-controller="Home" asp-action="Signout" title="Signout" data-toggle="tooltip" data-placement="right" data-container="body">
+                  <span class="icon icon-log-out"></span>
+                  <small class="iconav-nav-label visible-xs-block">Sign out</small>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>   
+        <div class="container">
+            @RenderBody()
+        </div>
+      </div>
+        <environment names="Development,Staging,Production">
+            <script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery">
+            </script>
+            <script src="//ajax.aspnetcdn.com/ajax/hammer.js/2.0.4/hammer.min.js"
+                    asp-fallback-src="~/lib/hammer.js/hammer.js"
+                    asp-fallback-test="window.Hammer">
+            </script>
+            <script src="~/js/chart.js" asp-file-version="true"></script>
+            <script src="~/js/tablesorter.min.js" asp-file-version="true"></script>
+            <script src="~/js/site.js" asp-file-version="true"></script>
+        </environment>
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "Team",
+    "AdminUsers": "bill@ms.com",
+    "ConnectionString" : "",
+    "AzureStorageConnectionString" : "",
+    "AzureStorageBlobName" : "",
+    "AzureStorageContainerName" : ""
+  }
+}

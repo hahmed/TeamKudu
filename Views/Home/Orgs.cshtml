@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "Orgs";
+}
+@model List<Team.Models.Organization>
+  <div class="dashhead">
+      <div class="dashhead-titles">
+        <h6 class="dashhead-subtitle">Dashboards</h6>
+        <h3 class="dashhead-title">Organisations</h3>
+      </div>
+  </div>
+    <ul class="nav nav-bordered">
+      <li class="active" role="presentation">
+        <a asp-controller="home" asp-action="orgs" role="tab" aria-controls="all">All</a>
+      </li>
+      <li role="presentation">
+        <a asp-controller="home" asp-action="orgs" role="tab" asp-route-type="Lender" aria-controls="lenders">Lenders</a>
+      </li>
+      <li role="presentation">
+        <a asp-controller="home" asp-action="orgs" role="tab" asp-route-type="SurveyingFirm" aria-controls="surveyingfirms">Surveying Firms</a>
+      </li>
+      <li role="presentation">
+        <a asp-controller="home" asp-action="new" role="tab" aria-controls="New Lender">New Lender</a>
+      </li>
+    </ul>
+    <hr class="m-t-0 m-b-lg">
+    
+    <table class="table" data-sort="table">
+      <thead>
+        <tr>
+          <th class="header" style="max-width:40px;">Id</th>
+          <th class="header">Identifier</th>
+          <th class="header">Name</th>
+          <th class="header">Email</th>
+          <th class="header">Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach(var org in Model)
+        {
+          <tr>
+            <td><a href="https://surventrix.net/@org.Identifier/dashboard">#@org.OrganizationId</a></td>
+            <td>@org.Identifier</td>
+            <td>@org.Name</td>
+            <td>@org.Email</td>
+            <td>@org.CreatedAt.ToString("dd MMM yy")</td>
+          </tr>
+         }
+        </tbody>
+    </table>
