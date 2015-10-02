@@ -17,7 +17,7 @@
     "Microsoft.Framework.Logging.Console": "1.0.0-beta7",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-beta7",
     "Microsoft.AspNet.Authentication.OpenIdConnect": "1.0.0-beta7",
-    "Microsoft.Net.Http.Client": "1.0.0-beta7",
+    "Microsoft.Net.Http.Client": "1.0.0-beta6",
     "EntityFramework.SqlServer": "7.0.0-beta7",
     "EntityFramework.Commands": "7.0.0-beta7",
     "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-beta7"
