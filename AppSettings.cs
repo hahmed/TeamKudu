@@ -6,8 +6,6 @@ namespace Team
     public class AppSettings
     {
         public string AdminUsers { get; set; }
-        
-        public string ConnectionString { get; set; }
 
         public string AzureStorageConnectionString { get; set; }
 
