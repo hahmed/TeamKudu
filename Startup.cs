@@ -19,8 +19,9 @@ namespace Team
             // Setup configuration sources.
             var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json")
-                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
+            
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             IsDevelopment = env.IsDevelopment();
         }
