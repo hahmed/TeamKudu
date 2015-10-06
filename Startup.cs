@@ -36,7 +36,9 @@ namespace Team
               .AddSqlServer()
               .AddDbContext<ApplicationDbContext>(options =>
               {
-                  options.UseSqlServer(config["ConnectionString"]);
+                  // config["ConnectionString"] works for development env - we are getting this value from -> Configuration.GetSection("AppSettings")
+                  // Configuration["ConnectionString"] works for production - we are pulling this value out directly from -> IConfigurationRoot
+                  options.UseSqlServer(Configuration["ConnectionString"]); 
               });
 
             // register services...    
