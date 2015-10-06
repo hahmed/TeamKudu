@@ -22,23 +22,35 @@ namespace Team
                 .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            IsDevelopment = env.IsDevelopment();
         }
 
         public IConfigurationRoot Configuration { get; set; }
+        
+        public bool IsDevelopment { get; set; }
 
         // This method gets called by the runtime.
         public void ConfigureServices(IServiceCollection services)
         {
             var config = Configuration.GetSection("AppSettings");
-            var collection = services.Configure<AppSettings>(config, optionsName: null);
+            services.Configure<AppSettings>(config, optionsName: null);
             
+            // Setup options with DI
+            services.AddOptions();
+                   
+            string connectionString = Configuration["Data:DefaultConnection:ConnectionString"]; // azure portal is not overriding this!        
+  
+            // pull from host...
+            if(!IsDevelopment)
+            {
+                connectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+            }
+
             services.AddEntityFramework()
               .AddSqlServer()
               .AddDbContext<ApplicationDbContext>(options =>
               {
-                  // config["ConnectionString"] works for development env - we are getting this value from -> Configuration.GetSection("AppSettings")
-                  // Configuration["ConnectionString"] works for production - we are pulling this value out directly from -> IConfigurationRoot
-                  options.UseSqlServer(Configuration["ConnectionString"]); 
+                  options.UseSqlServer(connectionString);
               });
 
             // register services...    
