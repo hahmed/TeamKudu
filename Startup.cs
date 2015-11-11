@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -7,8 +8,14 @@ using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using Microsoft.AspNet.Http;
-using Team.Models;
+using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using Microsoft.AspNet.Diagnostics.Entity;
+
+using Team.Models;
+using Microsoft.AspNet.Localization;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace Team
 {
@@ -17,7 +24,8 @@ namespace Team
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             // Setup configuration sources.
-            var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json")
                 .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
             
@@ -34,17 +42,30 @@ namespace Team
         public void ConfigureServices(IServiceCollection services)
         {
             var config = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(config, optionsName: null);
-            
+            services.Configure<AppSettings>(config);
+
             // Setup options with DI
             services.AddOptions();
-                   
-            string connectionString = Configuration["Data:DefaultConnection:ConnectionString"]; // azure portal is not overriding this!        
-  
-            // pull from host...
-            if(!IsDevelopment)
+            // Add logging to DI
+            services.AddLogging();
+            
+            services.AddAuthorization(options =>
             {
-                connectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+                options.AddPolicy("Admin", policyBuilder =>
+                {
+                    policyBuilder.RequireClaim(
+                        ClaimTypes.Name,
+                        Configuration["AppSettings:AdminUsers"].Split(',')
+                    );
+                });
+            });
+
+            string connectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+
+            // pull from connection string in azure/appsettings until I get a fix for this...
+            if (!IsDevelopment)
+            {
+                connectionString = Configuration["ConnectionString"];
             }
 
             services.AddEntityFramework()
@@ -53,72 +74,87 @@ namespace Team
               {
                   options.UseSqlServer(connectionString);
               });
+            
+            // Add MVC services to the services container.
+            services.AddMvc(options =>
+            {
+                if (!IsDevelopment)
+                {
+                   options.Filters.Add(new RequireHttpsAttribute());
+                }
+            });
 
             // register services...    
             services.AddScoped<ISurventrixService, SurventrixService>();
-
-            services.Configure<CookieAuthenticationOptions>(options =>
-            {
-                options.AutomaticAuthentication = true;
-                options.LoginPath= "/";
-            });
-
-            // Add MVC services to the services container.
-            services.AddMvc();
-
-            // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
-            // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
-            // services.AddWebApiConventions();
-
-            //services.AddTransient<IEmailSender, AuthMessageSender>();
         }
 
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.MinimumLevel = LogLevel.Information;
+            loggerFactory.MinimumLevel = LogLevel.Debug;
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
 
-            // Configure the HTTP request pipeline.
+            app.UseIISPlatformHandler();
 
+            // set locale to GB
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(new CultureInfo("en-GB")),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en-GB")
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en-GB")
+                }
+            });
+            
             // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
             {
-                app.UseErrorPage();
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
             else
             {
                 // Add Error handling middleware which catches all application specific errors and
                 // send the request to the following path or controller action.
-                app.UseErrorHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
 
             // Add static files to the request pipeline.
             app.UseStaticFiles();
-            app.UseCookieAuthentication();
+            
+            app.UseCookieAuthentication(options =>
+            {
+                options.AutomaticAuthentication = true;
+                options.LoginPath = "/";
+                if (env.IsProduction())
+                {
+                    options.CookieSecure = CookieSecureOption.Always;
+                }
+            });
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                // Uncomment the following line to add a route for porting Web API 2 controllers.
-                // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
+                    template: "{controller=Home}/{action=Index}");
             });
 
 
             // allow pinging and ponging... :)
             app.Use((context, next) =>
             {
-               Console.WriteLine("{0} {1}{2}{3}",
-                    context.Request.Method,
-                    context.Request.PathBase,
-                    context.Request.Path,
-                    context.Request.QueryString);
-                    
+                Console.WriteLine("{0} {1}{2}{3}",
+                     context.Request.Method,
+                     context.Request.PathBase,
+                     context.Request.Path,
+                     context.Request.QueryString);
+
                 if (context.Request.Path.StartsWithSegments("/ping"))
                 {
                     return context.Response.WriteAsync("pong");

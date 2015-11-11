@@ -24,7 +24,7 @@ namespace Team.Controllers
         {
             _surventrixService = surventrixService;
             _dbContext = dbContext;
-            _appSettings = appSettings.Options;
+            _appSettings = appSettings.Value;
         }
 
         [Route("/")]
@@ -138,8 +138,8 @@ namespace Team.Controllers
 
             ClaimsIdentity identity = CreateIdentity(user, CookieAuthenticationDefaults.AuthenticationScheme);
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-            await Context.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await Context.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             return RedirectToAction("Index");
         }
@@ -153,7 +153,7 @@ namespace Team.Controllers
                 return RedirectToAction("Index");
             }
             Console.WriteLine("{0} is attempting to signout off team app...", User.Identity.Name);
-            await Context.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index");
         }
 
