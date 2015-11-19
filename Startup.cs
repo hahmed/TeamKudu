@@ -3,19 +3,18 @@ using System.Security.Claims;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
-using Microsoft.AspNet.Diagnostics.Entity;
+using Microsoft.AspNet.Localization;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.Globalization;
 
 using Team.Models;
-using Microsoft.AspNet.Localization;
-using System.Globalization;
-using System.Collections.Generic;
+
 
 namespace Team
 {
@@ -98,24 +97,13 @@ namespace Team
             app.UseIISPlatformHandler();
 
             // set locale to GB
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture(new CultureInfo("en-GB")),
-                SupportedCultures = new List<CultureInfo>
-                {
-                    new CultureInfo("en-GB")
-                },
-                SupportedUICultures = new List<CultureInfo>
-                {
-                    new CultureInfo("en-GB")
-                }
-            });
+            app.UseRequestLocalization(new RequestCulture(new CultureInfo("en-GB")));
             
             // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -129,7 +117,7 @@ namespace Team
             
             app.UseCookieAuthentication(options =>
             {
-                options.AutomaticAuthentication = true;
+                options.AutomaticAuthenticate = true;
                 options.LoginPath = "/";
                 if (env.IsProduction())
                 {

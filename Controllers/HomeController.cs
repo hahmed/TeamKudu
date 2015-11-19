@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Team.Models;
-using Microsoft.Framework.OptionsModel;
+using Microsoft.Extensions.OptionsModel;
 using System.Security.Claims;
 using Microsoft.AspNet.Authentication.Cookies;
 
